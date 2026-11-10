@@ -16,15 +16,9 @@ if os.getenv("AUTO_CREATE_TABLES", "").lower() == "true":
     Base.metadata.create_all(bind=engine)
 
 
-default_frontend_origins = (
-    "http://localhost:5173,"
-    "http://127.0.0.1:5173,"
-    "http://localhost:4173,"
-    "http://127.0.0.1:4173"
-)
 frontend_origins = [
-    origin.strip()
-    for origin in os.getenv("FRONTEND_ORIGINS", default_frontend_origins).split(",")
+    origin.strip().rstrip("/")
+    for origin in os.getenv("FRONTEND_ORIGINS", "").split(",")
     if origin.strip()
 ]
 
@@ -37,8 +31,8 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=frontend_origins,
-    allow_credentials=False,
-    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_credentials=True,
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
