@@ -1,6 +1,7 @@
 .env
 .env.*
 !.env.example
+!Hospital_Frontend/.env.production
 
 venv/
 .venv/
