@@ -16,12 +16,6 @@ if os.getenv("AUTO_CREATE_TABLES", "").lower() == "true":
     Base.metadata.create_all(bind=engine)
 
 
-frontend_origins = [
-    origin.strip().rstrip("/")
-    for origin in os.getenv("FRONTEND_ORIGINS", "").split(",")
-    if origin.strip()
-]
-
 app = FastAPI(
     title="Hospital Management System API",
     description="Backend API for patients, doctors, and manual treatment assignments.",
@@ -30,7 +24,13 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=frontend_origins,
+    allow_origins=[
+        "https://hospitalmanagement-ashy.vercel.app",
+    ],
+    allow_origin_regex=(
+        r"^https://hospitalmanagement-[a-z0-9]+-"
+        r"pinisetti-jagadeeshs-projects\.vercel\.app$"
+    ),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
