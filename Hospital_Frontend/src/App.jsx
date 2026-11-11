@@ -8,6 +8,7 @@ import { pageMeta } from './data/navigation'
 import { useHospitalData } from './hooks/useHospitalData'
 import AssignmentsPage from './pages/AssignmentsPage'
 import DoctorsPage from './pages/DoctorsPage'
+import LandingPage from './pages/LandingPage'
 import OverviewPage from './pages/OverviewPage'
 import PatientsPage from './pages/PatientsPage'
 import DoctorDashboard from './pages/DoctorDashboard'
@@ -148,14 +149,14 @@ function ProtectedRole({ role, children }) {
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<RoleRedirect />} />
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register/patient" element={<PatientRegistrationPage />} />
       <Route path="/register/doctor" element={<DoctorRegistrationPage />} />
       <Route path="/admin/*" element={<ProtectedRole role="ADMIN"><AdminDashboard /></ProtectedRole>} />
       <Route path="/patient/*" element={<ProtectedRole role="PATIENT"><PatientDashboard /></ProtectedRole>} />
       <Route path="/doctor/*" element={<ProtectedRole role="DOCTOR"><DoctorDashboard /></ProtectedRole>} />
-      <Route path="*" element={<RoleRedirect />} />
+      <Route path="*" element={<LandingPage />} />
     </Routes>
   )
 }
