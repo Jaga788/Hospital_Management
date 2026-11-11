@@ -6,6 +6,7 @@ export function useHospitalData() {
   const [doctors, setDoctors] = useState([])
   const [assignments, setAssignments] = useState([])
   const [activeAssignments, setActiveAssignments] = useState([])
+  const [doctorRegistrations, setDoctorRegistrations] = useState([])
   const [loading, setLoading] = useState(true)
   const [apiError, setApiError] = useState('')
   const [toast, setToast] = useState(null)
@@ -14,16 +15,18 @@ export function useHospitalData() {
     setLoading(true)
     setApiError('')
     try {
-      const [patientData, doctorData, assignmentData, activeData] = await Promise.all([
+      const [patientData, doctorData, assignmentData, activeData, registrations] = await Promise.all([
         apiRequest('/patients/?limit=500'),
         apiRequest('/doctors/?limit=500'),
         apiRequest('/assignments/?limit=500'),
         apiRequest('/assignments/active'),
+        apiRequest('/auth/admin/doctors'),
       ])
       setPatients(patientData)
       setDoctors(doctorData)
       setAssignments(assignmentData)
       setActiveAssignments(activeData)
+      setDoctorRegistrations(registrations)
     } catch (error) {
       setApiError(error.message)
     } finally {
@@ -41,7 +44,7 @@ export function useHospitalData() {
     [patients],
   )
   const availableDoctors = useMemo(
-    () => doctors.filter((doctor) => doctor.status === 'AVAILABLE'),
+    () => doctors.filter((doctor) => doctor.status === 'AVAILABLE' && doctor.verification_status === 'APPROVED'),
     [doctors],
   )
 
@@ -112,11 +115,25 @@ export function useHospitalData() {
     }
   }
 
+  const reviewDoctor = async (doctor, decision, reason) => {
+    try {
+      await apiRequest(`/auth/admin/doctors/${doctor.user_id}/${decision}`, {
+        method: 'POST',
+        ...(reason ? { body: JSON.stringify({ reason }) } : {}),
+      })
+      notify(`Doctor registration ${decision === 'approve' ? 'approved' : 'rejected'}`)
+      await loadData()
+    } catch (error) {
+      notify(error.message, 'error')
+    }
+  }
+
   return {
     patients,
     doctors,
     assignments,
     activeAssignments,
+    doctorRegistrations,
     waitingPatients,
     availableDoctors,
     loading,
@@ -127,5 +144,6 @@ export function useHospitalData() {
     deleteRecord,
     assignPatient,
     releaseAssignment,
+    reviewDoctor,
   }
 }

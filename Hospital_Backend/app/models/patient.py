@@ -17,3 +17,9 @@ class Patient(Base):
     status = Column(String(30), nullable=False, default="WAITING")
 
     assignments = relationship("Assignment", back_populates="patient")
+    profile = relationship(
+        "PatientProfile",
+        back_populates="patient",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )

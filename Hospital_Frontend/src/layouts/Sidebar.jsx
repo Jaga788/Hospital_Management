@@ -1,7 +1,7 @@
 import { navigation } from '../data/navigation'
 import Icon from '../components/Icon'
 
-export default function Sidebar({ page, onNavigate, mobileNavOpen, onClose, waitingCount }) {
+export default function Sidebar({ page, onNavigate, mobileNavOpen, onClose, waitingCount, email }) {
   return (
     <>
       {mobileNavOpen && <button className="nav-backdrop" aria-label="Close navigation" onClick={onClose} />}
@@ -32,7 +32,7 @@ export default function Sidebar({ page, onNavigate, mobileNavOpen, onClose, wait
           </div>
           <div className="profile">
             <div className="avatar avatar-admin">AD</div>
-            <div className="profile-copy"><strong>Admin user</strong><span>Hospital administrator</span></div>
+            <div className="profile-copy"><strong>Admin</strong><span>{email}</span></div>
             <button className="icon-button profile-more" aria-label="Profile options"><Icon name="more" size={19} /></button>
           </div>
         </div>

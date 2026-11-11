@@ -2,11 +2,16 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.auth import require_roles
 from app.schemas.assignment import AssignmentCreate, AssignmentResponse
 from app.schemas.patient import PatientResponse
 from app.services import assignment as assignment_service
 
-router = APIRouter(prefix="/assignments", tags=["Assignments"])
+router = APIRouter(
+    prefix="/assignments",
+    tags=["Assignments"],
+    dependencies=[Depends(require_roles("ADMIN"))],
+)
 
 
 def raise_service_error(result):

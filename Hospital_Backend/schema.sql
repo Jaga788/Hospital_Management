@@ -37,3 +37,33 @@
     CREATE INDEX IF NOT EXISTS ix_assignments_id ON assignments (id);
     CREATE INDEX IF NOT EXISTS ix_assignments_doctor_id ON assignments (doctor_id);
     CREATE INDEX IF NOT EXISTS ix_assignments_patient_id ON assignments (patient_id);
+
+    CREATE TABLE IF NOT EXISTS users (
+        id UUID PRIMARY KEY,
+        email VARCHAR(255) NOT NULL UNIQUE,
+        password_hash VARCHAR(255) NOT NULL,
+        role VARCHAR(20) NOT NULL CHECK (role IN ('ADMIN', 'DOCTOR', 'PATIENT')),
+        is_active BOOLEAN NOT NULL DEFAULT TRUE,
+        is_verified BOOLEAN NOT NULL DEFAULT FALSE,
+        token_version INTEGER NOT NULL DEFAULT 0,
+        created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS patient_profiles (
+        user_id UUID PRIMARY KEY REFERENCES users (id) ON DELETE CASCADE,
+        patient_id INTEGER NOT NULL UNIQUE REFERENCES patients (id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS doctor_profiles (
+        user_id UUID PRIMARY KEY REFERENCES users (id) ON DELETE CASCADE,
+        doctor_id INTEGER NOT NULL UNIQUE REFERENCES doctors (id) ON DELETE CASCADE,
+        license_number VARCHAR(100) NOT NULL,
+        verification_status VARCHAR(20) NOT NULL DEFAULT 'PENDING'
+            CHECK (verification_status IN ('PENDING', 'APPROVED', 'REJECTED')),
+        reviewed_by UUID REFERENCES users (id),
+        reviewed_at TIMESTAMP WITH TIME ZONE,
+        rejection_reason VARCHAR(500)
+    );
+
+    CREATE INDEX IF NOT EXISTS ix_doctor_profiles_verification_status
+        ON doctor_profiles (verification_status);

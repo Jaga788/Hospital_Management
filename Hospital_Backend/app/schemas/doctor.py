@@ -28,3 +28,4 @@ class DoctorResponse(BaseModel):
     email: Optional[str] = None
     experience: Optional[int] = None
     status: str
+    verification_status: str = "UNREGISTERED"

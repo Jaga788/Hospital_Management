@@ -5,6 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from app.models.patient import Patient
 from app.models.doctor import Doctor
 from app.models.assignment import Assignment
+from app.models.user import DoctorProfile
 
 
 def assign_patient(db: Session, patient_id: int, doctor_id: int):
@@ -15,6 +16,21 @@ def assign_patient(db: Session, patient_id: int, doctor_id: int):
     doctor = db.query(Doctor).filter(Doctor.id == doctor_id).with_for_update().first()
     if doctor is None:
         return {"error": "Doctor not found", "status_code": 404}
+
+    doctor_profile = (
+        db.query(DoctorProfile)
+        .filter(
+            DoctorProfile.doctor_id == doctor_id,
+            DoctorProfile.verification_status == "APPROVED",
+        )
+        .first()
+    )
+    if (
+        doctor_profile is None
+        or not doctor_profile.user.is_active
+        or not doctor_profile.user.is_verified
+    ):
+        return {"error": "Doctor is not approved to accept assignments", "status_code": 403}
 
     if patient.status != "WAITING":
         return {"error": "Patient is not waiting", "status_code": 409}

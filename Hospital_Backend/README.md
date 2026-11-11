@@ -1,6 +1,6 @@
 # Hospital Management System — FastAPI + PostgreSQL
 
-FastAPI backend with Patient CRUD, Doctor CRUD, manual Patient-to-Doctor assignment, and release workflow. Production uses Supabase PostgreSQL; local MySQL remains supported when `DATABASE_URL` is not set.
+FastAPI backend with patient/doctor account registration, JWT authentication, role-protected patient and doctor CRUD, and manual Patient-to-Doctor assignment. Production uses Supabase PostgreSQL; local MySQL remains supported when `DATABASE_URL` is not set.
 
 ## Features
 - Patient CRUD: create, list, retrieve, full update (PUT), partial update (PATCH), delete
@@ -11,12 +11,12 @@ FastAPI backend with Patient CRUD, Doctor CRUD, manual Patient-to-Doctor assignm
 - Swagger UI at `/docs`
 
 ## 1. Create the database tables
-In the Supabase SQL Editor, run `schema.sql` to create the three application tables if they do not already exist. The script does not drop tables or modify existing rows. It is intentionally not run by the application during startup: a database outage should not prevent Uvicorn from binding to Render's port.
+Back up Supabase, then run `schema.sql` in the SQL Editor. The script adds the authentication tables without dropping or rewriting existing patient, doctor, or assignment tables and rows. It is not run automatically during startup.
 
 ## 2. Configure environment
 For local MySQL, copy `.env.example` to `.env` and set your local `DB_PASSWORD`. For a fresh local database only, set `AUTO_CREATE_TABLES=true` to create missing tables at import time; do not enable this in Render. For production, set `DATABASE_URL` in Render to the PostgreSQL URI from Supabase; include `sslmode=require` if it is not already present, and URL-encode special characters in the password. Do not commit `.env` or put database credentials in frontend variables.
 
-Set `FRONTEND_ORIGINS` in Render to a comma-separated list of the exact Vercel production and preview origins that should access the API, without trailing slashes. The default allows localhost only.
+The CORS middleware allows the production Vercel site and matching preview origins. Update its origin list and preview regex if the Vercel project domain changes.
 
 ## 3. Create virtual environment and install packages (Windows PowerShell)
 ```powershell
@@ -39,7 +39,7 @@ Open `http://127.0.0.1:8000/docs`.
 - Root directory: `Hospital_Backend`
 - Build command: `pip install -r requirements.txt`
 - Start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-- Environment variables: `DATABASE_URL`, `FRONTEND_ORIGINS`
+- Environment variables: `DATABASE_URL`, `JWT_SECRET_KEY`
 - Optional health check path: `/ready`
 
 Render provides `PORT`; do not hardcode a production port.
@@ -53,6 +53,8 @@ Render provides `PORT`; do not hardcode a production port.
 Set the value to the backend origin only (no `/api` suffix and no trailing slash). Redeploy the frontend after changing environment variables. The Vite development proxy is not available in the Vercel deployment.
 
 ## Main endpoints
+
+The authentication rollout, additive migration, one-time administrator bootstrap, and role permissions are documented in [AUTHENTICATION.md](./AUTHENTICATION.md).
 
 ### Patients
 - `POST /patients/`

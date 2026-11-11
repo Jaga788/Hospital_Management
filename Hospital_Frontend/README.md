@@ -20,7 +20,11 @@ Responsive React dashboard for the FastAPI hospital management backend. It suppo
    npm run dev
    ```
 
-The Vite development server proxies `/api` requests to `http://127.0.0.1:8000`, so the backend must be running. To use a different backend host locally, set `HOSPITAL_API_TARGET` before starting Vite. For Vercel, set `VITE_API_BASE_URL` to the Render backend origin (without an `/api` suffix), and set `FRONTEND_ORIGINS` in Render to the Vercel site's origin.
+The Vite development server proxies `/api` requests to `http://127.0.0.1:8000`, so the backend must be running. To use a different backend host locally, set `HOSPITAL_API_TARGET` before starting Vite. For Vercel, set `VITE_API_BASE_URL` to the Render backend origin (without an `/api` suffix). FastAPI CORS is configured in `Hospital_Backend/app/main.py`.
+
+## Authentication
+
+The app provides patient and doctor registration, a shared login, role-based dashboards, profile updates, password changes, and logout. Admin accounts are created only by the backend bootstrap command documented in `Hospital_Backend/AUTHENTICATION.md`. Doctor accounts cannot sign in until an admin approves their professional registration. The legacy management dashboard and its CRUD APIs require the `ADMIN` role.
 
 ## Available screens
 

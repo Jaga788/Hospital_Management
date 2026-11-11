@@ -1793,3 +1793,301 @@ tr:hover .row-actions,
     transition-duration: .01ms !important;
   }
 }
+
+.auth-shell {
+  display: grid;
+  min-height: 100vh;
+  padding: 32px 18px;
+  place-items: center;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(84, 199, 162, .12), transparent 34%),
+    #f4f7f6;
+}
+
+.auth-card {
+  width: min(100%, 520px);
+  padding: 38px;
+  background: #fff;
+  border: 1px solid #e6ece9;
+  border-radius: 16px;
+  box-shadow: 0 18px 60px rgba(18, 42, 53, .09);
+}
+
+.auth-brand {
+  display: inline-block;
+  margin-bottom: 26px;
+  color: #173c35;
+  font-size: 24px;
+  font-weight: 760;
+  letter-spacing: -.8px;
+  text-decoration: none;
+}
+
+.auth-brand span {
+  color: #38a98c;
+}
+
+.auth-card h1,
+.portal-heading h1 {
+  margin: 0;
+  color: #1b3439;
+  font-size: 27px;
+  letter-spacing: -.6px;
+}
+
+.auth-description {
+  margin: 8px 0 24px;
+  color: #77868a;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.auth-form {
+  display: grid;
+  gap: 15px;
+}
+
+.auth-registration {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 13px;
+}
+
+.auth-full {
+  grid-column: 1 / -1;
+}
+
+.auth-submit {
+  width: 100%;
+  min-height: 44px;
+}
+
+.auth-links {
+  margin: 18px 0 0;
+  color: #69797d;
+  font-size: 12px;
+  text-align: center;
+}
+
+.auth-links a,
+.auth-notice a {
+  color: #187d65;
+  font-weight: 650;
+}
+
+.auth-notice {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  color: #226b57;
+  background: #e9f7f1;
+  border: 1px solid #cae9dd;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.auth-loading {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  color: #718084;
+  font-size: 14px;
+}
+
+.portal-shell {
+  min-height: 100vh;
+  background: #f4f7f6;
+}
+
+.portal-header {
+  display: flex;
+  min-height: 68px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 max(24px, calc((100vw - 1180px) / 2));
+  background: #fff;
+  border-bottom: 1px solid #e7ecea;
+}
+
+.portal-header .auth-brand {
+  margin: 0;
+}
+
+.portal-header > div {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #66777b;
+  font-size: 12px;
+}
+
+.portal-content {
+  width: min(100% - 36px, 1180px);
+  margin: 36px auto;
+}
+
+.portal-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.portal-eyebrow {
+  margin: 0 0 8px;
+  color: #359c7e;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 1.2px;
+}
+
+.portal-heading p:last-child,
+.portal-muted {
+  color: #748388;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.portal-card {
+  min-width: 0;
+  padding: 22px;
+  background: #fff;
+  border: 1px solid #e6ece9;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(18, 42, 53, .035);
+}
+
+.portal-card h2 {
+  margin: 0 0 16px;
+  color: #233e43;
+  font-size: 16px;
+}
+
+.portal-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.portal-list li {
+  display: grid;
+  gap: 5px;
+  padding: 12px;
+  background: #f7faf8;
+  border: 1px solid #edf1ef;
+  border-radius: 8px;
+}
+
+.portal-list strong {
+  color: #31484d;
+  font-size: 13px;
+}
+
+.portal-list span,
+.portal-list small {
+  color: #748388;
+  font-size: 11px;
+}
+
+.account-action {
+  padding: 8px 10px;
+  font-size: 11px;
+}
+
+.account-email {
+  max-width: 220px;
+  overflow: hidden;
+  color: #738186;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.password-dialog {
+  max-width: 440px;
+}
+
+.verification-panel {
+  padding: 18px 0 0;
+  border-top: 1px solid #e8edeb;
+}
+
+.verification-panel .panel-heading {
+  padding: 0 22px 14px;
+}
+
+.verification-panel .panel-heading h2 {
+  margin: 0;
+  color: #263e43;
+  font-size: 15px;
+}
+
+.verification-panel .panel-heading p,
+.verification-empty {
+  color: #748388;
+  font-size: 12px;
+}
+
+.verification-empty {
+  padding: 0 22px 20px;
+}
+
+.verification-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.verification-actions .button {
+  min-height: 32px;
+  padding: 0 10px;
+  font-size: 11px;
+}
+
+@media (max-width: 740px) {
+  .portal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .portal-header {
+    padding: 0 18px;
+  }
+
+  .portal-header > div {
+    gap: 8px;
+  }
+
+  .portal-header > div > span {
+    display: none;
+  }
+
+  .account-email {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .auth-card {
+    padding: 26px 20px;
+  }
+
+  .auth-registration {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-full {
+    grid-column: auto;
+  }
+
+  .topbar-actions .account-action {
+    min-height: 30px;
+    padding: 5px 7px;
+    font-size: 9px;
+  }
+}

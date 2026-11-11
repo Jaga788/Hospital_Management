@@ -8,7 +8,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app.database import Base, engine
 from app import models  # noqa: F401 - registers model tables for SQLAlchemy metadata
-from app.routers import patient, doctor, assignment
+from app.routers import auth, patient, doctor, assignment
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +39,7 @@ app.add_middleware(
 app.include_router(patient.router)
 app.include_router(doctor.router)
 app.include_router(assignment.router)
+app.include_router(auth.router)
 
 
 @app.get("/")

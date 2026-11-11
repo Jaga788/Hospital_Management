@@ -15,3 +15,13 @@ class Doctor(Base):
     status = Column(String(30), nullable=False, default="AVAILABLE")
 
     assignments = relationship("Assignment", back_populates="doctor")
+    profile = relationship(
+        "DoctorProfile",
+        back_populates="doctor",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+    @property
+    def verification_status(self):
+        return self.profile.verification_status if self.profile else "UNREGISTERED"

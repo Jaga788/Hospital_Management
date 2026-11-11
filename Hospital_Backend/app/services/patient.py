@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from app.models.patient import Patient
 from app.models.assignment import Assignment
+from app.models.user import PatientProfile
 from app.schemas.patient import PatientCreate, PatientUpdate
 
 
@@ -37,6 +38,10 @@ def delete_patient(db: Session, patient_id: int):
         return "not_found"
     if db.query(Assignment).filter(Assignment.patient_id == patient_id).first():
         return "has_assignments"
+    profile = db.query(PatientProfile).filter(PatientProfile.patient_id == patient_id).first()
+    if profile is not None:
+        profile.user.is_active = False
+        profile.user.is_verified = False
     db.delete(patient)
     db.commit()
     return "deleted"

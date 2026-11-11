@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { useAuth } from './auth/useAuth'
+import { DoctorRegistrationPage, LoginPage, PatientRegistrationPage } from './pages/AuthPages'
 import Icon from './components/Icon'
 import RecordModal from './components/RecordModal'
 import { pageMeta } from './data/navigation'
@@ -7,10 +10,12 @@ import AssignmentsPage from './pages/AssignmentsPage'
 import DoctorsPage from './pages/DoctorsPage'
 import OverviewPage from './pages/OverviewPage'
 import PatientsPage from './pages/PatientsPage'
+import DoctorDashboard from './pages/DoctorDashboard'
+import PatientDashboard from './pages/PatientDashboard'
 import DashboardLayout from './layouts/DashboardLayout'
 import './styles/App.css'
 
-function App() {
+function AdminDashboard() {
   const [page, setPage] = useState('overview')
   const [modal, setModal] = useState(null)
   const [search, setSearch] = useState('')
@@ -82,6 +87,7 @@ function App() {
         {page === 'doctors' && (
           <DoctorsPage
             doctors={hospital.doctors}
+            registrations={hospital.doctorRegistrations}
             loading={hospital.loading}
             search={search}
             setSearch={setSearch}
@@ -89,6 +95,7 @@ function App() {
             setFilter={setFilter}
             onEdit={(record) => setModal({ type: 'doctor', record })}
             onDelete={(record) => hospital.deleteRecord('doctor', record)}
+            onReview={hospital.reviewDoctor}
           />
         )}
         {page === 'assignments' && (
@@ -114,6 +121,42 @@ function App() {
         />
       )}
     </>
+  )
+}
+
+function roleHome(role) {
+  if (role === 'ADMIN') return '/admin'
+  if (role === 'DOCTOR') return '/doctor'
+  if (role === 'PATIENT') return '/patient'
+  return '/login'
+}
+
+function RoleRedirect() {
+  const { user, loading } = useAuth()
+  if (loading) return <div className="auth-loading">Loading your secure session…</div>
+  return <Navigate to={roleHome(user?.role)} replace />
+}
+
+function ProtectedRole({ role, children }) {
+  const { user, loading } = useAuth()
+  if (loading) return <div className="auth-loading">Loading your secure session…</div>
+  if (!user) return <Navigate to="/login" replace />
+  if (user.role !== role) return <Navigate to={roleHome(user.role)} replace />
+  return children
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<RoleRedirect />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register/patient" element={<PatientRegistrationPage />} />
+      <Route path="/register/doctor" element={<DoctorRegistrationPage />} />
+      <Route path="/admin/*" element={<ProtectedRole role="ADMIN"><AdminDashboard /></ProtectedRole>} />
+      <Route path="/patient/*" element={<ProtectedRole role="PATIENT"><PatientDashboard /></ProtectedRole>} />
+      <Route path="/doctor/*" element={<ProtectedRole role="DOCTOR"><DoctorDashboard /></ProtectedRole>} />
+      <Route path="*" element={<RoleRedirect />} />
+    </Routes>
   )
 }
 

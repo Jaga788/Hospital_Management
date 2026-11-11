@@ -2,10 +2,15 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.auth import require_roles
 from app.schemas.patient import PatientCreate, PatientUpdate, PatientResponse
 from app.services import patient as patient_service
 
-router = APIRouter(prefix="/patients", tags=["Patients"])
+router = APIRouter(
+    prefix="/patients",
+    tags=["Patients"],
+    dependencies=[Depends(require_roles("ADMIN"))],
+)
 
 
 @router.post("/", response_model=PatientResponse, status_code=status.HTTP_201_CREATED)

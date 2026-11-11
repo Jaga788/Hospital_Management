@@ -1,7 +1,7 @@
 import { navigation } from '../data/navigation'
 import Icon from '../components/Icon'
 
-export default function Topbar({ page, apiError, loading, onOpenNavigation }) {
+export default function Topbar({ page, apiError, loading, user, onOpenNavigation, onChangePassword, onLogout }) {
   return (
     <header className="topbar">
       <button className="icon-button mobile-menu" aria-label="Open navigation" onClick={onOpenNavigation}>
@@ -19,7 +19,9 @@ export default function Topbar({ page, apiError, loading, onOpenNavigation }) {
         <button className="icon-button notification-button" aria-label="Notifications">
           <Icon name="bell" size={19} /><i />
         </button>
-        <div className="avatar avatar-top">AD</div>
+        <button className="button button-secondary account-action" onClick={onChangePassword}>Password</button>
+        <button className="button button-secondary account-action" onClick={onLogout}>Sign out</button>
+        <span className="account-email">{user?.email}</span>
       </div>
     </header>
   )
