@@ -25,12 +25,8 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://hospitalmanagement-ashy.vercel.app",
+        "https://hospitalmanagement-ashy.vercel.app"
     ],
-    allow_origin_regex=(
-        r"^https://hospitalmanagement-[a-z0-9]+-"
-        r"pinisetti-jagadeeshs-projects\.vercel\.app$"
-    ),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
